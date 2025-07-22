@@ -23,6 +23,14 @@ import AdminProfile from "../Page/AdminProfile/AdminProfile";
 import ManageScholarships from "../Page/ManageScholarships/ManageScholarships";
 import ManagedAppliedScholarships from "../Page/ManagedAppliedScholarship/ManagedAppliedScholarship";
 import ManageReviews from "../Page/ManageReviews/ManageReviews";
+import ManageUsers from "../Page/ManageUsers/ManageUsers";
+import ModeratorDashboardLayout from "../Dashboard/Moderetor Dashboard/ModeratorDashboardLayout";
+import MyProfile from "../Page/moderetor/Moderetor Profile/MyProfile";
+import ManageScholarshipMod from "../Page/moderetor/ManageScholarshipMod";
+import AllReviewmod from "../Page/moderetor/AllReviewmod";
+import AplidScholarshipMod from "../Page/moderetor/AplidScholarshipMod";
+import AddSholarshipMod from "../Page/moderetor/AddSholarshipMod";
+
 
 
 
@@ -107,8 +115,8 @@ const scholarshipLoader = async () => {
         element: <ManagedAppliedScholarships/>
       },
       {
-        path: "manage-users",
-        element: <h1></h1>
+        path: "/admin-dashboard/manage-users",
+        element: <ManageUsers/>
       },
       {
         path: "/admin-dashboard/manage-review",
@@ -134,5 +142,34 @@ const scholarshipLoader = async () => {
       },
 
     ]
+  },
+  {
+  path: '/moderetor-dashboard',
+  element :<ModeratorDashboardLayout/>,
+  children:[
+    {
+      index : true,
+      element : <MyProfile/>
+    },
+{
+  path: 'manage-scholarshipsmod',
+  element: <ManageScholarshipMod/>
+},
+{
+  path:'allreview',
+  element :<AllReviewmod/>
+},
+{
+path:'applied-scholarships',
+  element :<AplidScholarshipMod/>  
+},
+{
+  path:'addscholarship',
+  element :<AddSholarshipMod/>
+}
+
+  ]
+
+
   }
 ]);

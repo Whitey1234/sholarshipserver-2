@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useActionState, useEffect, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { FiEye, FiEdit, FiTrash2 } from 'react-icons/fi';
+import axiosSecure from '../../Hooks/useAxiosSecure';
 
 const MySwal = withReactContent(Swal);
 
@@ -11,7 +12,7 @@ const ManageScholarships = () => {
   const [editData, setEditData] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/scholarships')
+    axiosSecure.get('/scholarships')
       .then(res => setScholarships(res.data))
       .catch(err => console.error(err));
   }, []);

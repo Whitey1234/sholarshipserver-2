@@ -31,7 +31,7 @@ const AdminDashboard = () => {
           <li><Link to="/admin-dashboard/aaddsclorship">Add Scholarship</Link></li>
           <li><Link to="/admin-dashboard/manage-scholarship">Manage Scholarship</Link></li>
           <li><Link to="/admin-dashboard/manage-applied-application">Manage Applied Application</Link></li>
-          <li><Link to="/admin/manage-users">Manage Users</Link></li>
+          <li><Link to="/admin-dashboard/manage-users">Manage Users</Link></li>
           <li><Link to="/admin-dashboard/manage-review">Manage Review</Link></li>
         </ul>    
       </div>

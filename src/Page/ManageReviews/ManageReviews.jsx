@@ -48,7 +48,7 @@ const ManageReviews = () => {
               <p className="text-sm text-gray-500 mb-2">{review.subjectCategory}</p>
               <div className="flex items-center mb-2">
                 <img
-                  src={review.reviewerImage}
+                  src={review.userImage}
                   alt="Reviewer"
                   className="w-10 h-10 rounded-full mr-3"
                 />

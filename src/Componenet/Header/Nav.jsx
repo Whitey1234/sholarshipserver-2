@@ -38,18 +38,22 @@ const Nav = () => {
               {/* ✅ Only show these nav items if user is logged in (commented out now) */}
               {user && (
                 <>
-                  <li><Link to="/find-tutior" className="hover:text-accent">Find Tutors</Link></li>
-                  {(userRole === 'admin' ||userRole === 'moderator' )&&(
+                  
+                  {(userRole === 'admin' )&&(
                       <li><Link to="/admin-dashboard" className="hover:text-accent">Admin Dashboard</Link></li>
                     )
                   }
+                   {(userRole === 'moderator' )&&(
+                      <li><Link to="/moderetor-dashboard" className="hover:text-accent">Moderetor Dashboard</Link></li>
+                    )
+                  }
+                  
                   {(userRole === 'user' ||userRole === 'moderator' || userRole === 'admin'  )&&(
                       <li><Link to="/user-dashboard" className="hover:text-accent"> Dashboard</Link></li>
                     )
                   }
                   
-                  <li><Link to="/my-booked-tutors" className="hover:text-accent">My Booked Tutors</Link></li>
-                  <li><Link to="/my-tutor" className="hover:text-accent">My Added Tutors</Link></li>
+                 
                 </>
               )}
             </ul>
@@ -99,17 +103,29 @@ const Nav = () => {
             </label>
             <ul tabIndex={0} className="menu dropdown-content mt-2 p-3 shadow bg-base-100 rounded-box w-52 text-blue-700">
               <li><Link to="/">Home</Link></li>
-              <li><Link to="/all-scholarship">All Scholarship</Link></li>
+            <li><Link to="/all-scholarship" className="hover:text-accent">All Sholarship</Link></li>
 
               {/* ✅ Mobile nav items (commented out user-based links) */}
-              {/* {user && (
+              {user && (
                 <>
-                  <li><Link to="/find-tutior">Find Tutors</Link></li>
-                  <li><Link to="/add-tutiour">Add Tutors</Link></li>
-                  <li><Link to="/my-booked-tutors">My Booked Tutors</Link></li>
-                  <li><Link to="/my-tutor">My Added Tutors</Link></li>
+                  
+                  {(userRole === 'admin' )&&(
+                      <li><Link to="/admin-dashboard" className="hover:text-accent">Admin Dashboard</Link></li>
+                    )
+                  }
+                   {(userRole === 'moderator' )&&(
+                      <li><Link to="/moderetor-dashboard" className="hover:text-accent">Moderetor Dashboard</Link></li>
+                    )
+                  }
+                  
+                  {(userRole === 'user' ||userRole === 'moderator' || userRole === 'admin'  )&&(
+                      <li><Link to="/user-dashboard" className="hover:text-accent"> Dashboard</Link></li>
+                    )
+                  }
+                  
+                 
                 </>
-              )} */}
+              )}
             </ul>
           </div>
         </div>
