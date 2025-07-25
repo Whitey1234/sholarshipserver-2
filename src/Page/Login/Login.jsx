@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router";
 import Lottie from "lottie-react";
 // import lottieLogin from "../../../Animation - 1749217664991.json"; // Replace with your file
 import { AuthContext } from "../../Provider/AuthProvider";
+import { FaGoogle } from "react-icons/fa";
 
 const Login = () => {
   const { login, gLogin } = useContext(AuthContext);
@@ -80,12 +81,12 @@ const Login = () => {
         <div className="divider">OR</div>
 
         <button onClick={handleGoogleLogin} className="btn btn-outline w-full">
-          Login with Google
+             <FaGoogle/> Login with Google
         </button>
 
         <p className="text-center text-sm mt-4">
           Don't have an account?{" "}
-          <a href="/register" className="link link-primary font-medium">
+          <a href="/signup" className="link link-primary font-medium">
             Register here
           </a>
         </p>

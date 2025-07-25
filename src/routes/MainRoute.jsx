@@ -30,6 +30,7 @@ import ManageScholarshipMod from "../Page/moderetor/ManageScholarshipMod";
 import AllReviewmod from "../Page/moderetor/AllReviewmod";
 import AplidScholarshipMod from "../Page/moderetor/AplidScholarshipMod";
 import AddSholarshipMod from "../Page/moderetor/AddSholarshipMod";
+import Analytics from "../Page/Analytics/Analytics";
 import PrivateAdminRoute from "../private/PrivateAdminRoute";
 import PrivateModRoute from "../private/PrivateModRoute";
 
@@ -102,11 +103,15 @@ const scholarshipLoader = async () => {
     children: [
       {
         index : true,
-        element: <PrivateAdminRoute> <AdminProfile/></PrivateAdminRoute>
+        element: <PrivateAdminRoute> <Analytics/> </PrivateAdminRoute>
+      },
+      {
+        path:"/admin-dashboard/profile",
+        element:  <PrivateAdminRoute><AdminProfile/></PrivateAdminRoute>
       },
       {
         path:"/admin-dashboard/aaddsclorship",
-        element:  <PrivateAdminRoute><AddScholarship></AddScholarship></PrivateAdminRoute>
+        element:  <PrivateAdminRoute><AddScholarship/></PrivateAdminRoute>
       },
       {
         path: "/admin-dashboard/manage-scholarship",
@@ -123,6 +128,10 @@ const scholarshipLoader = async () => {
       {
         path: "/admin-dashboard/manage-review",
         element:  <PrivateAdminRoute> <ManageReviews/> </PrivateAdminRoute>   
+      },
+      {
+        path: "/admin-dashboard/analytics",
+        element:  <PrivateAdminRoute> <Analytics/> </PrivateAdminRoute>   
       }
     ]
   },

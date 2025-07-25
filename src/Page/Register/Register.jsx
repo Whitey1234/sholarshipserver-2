@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router'; // use 'react-router-dom' if needed
 import axios from 'axios';
 import useAxiosSecure from '../../Hooks/useAxiosSecure.jsx';
 import { toast, ToastContainer } from 'react-toastify';
+import { FaGoogle } from 'react-icons/fa';
 
 const Register = () => {
   
@@ -131,8 +132,14 @@ const Register = () => {
         <div className="divider">OR</div>
 
         <button onClick={handleGoogleRegister} className="btn btn-outline w-full">
-          Register with Google
+          <FaGoogle/> Register with Google
         </button>
+        <p className="text-center text-sm mt-4">
+         If Already  have an account?{" "}
+          <a href="/login" className="link link-primary font-medium">
+            login here
+          </a>
+        </p>
       </div>
       <ToastContainer/>
     </div>

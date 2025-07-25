@@ -27,12 +27,13 @@ const AdminDashboard = () => {
           {/* Sidebar content here */}
           <li className="text-2xl font-semibold p-4">Admin Panel</li>
           <li><Link to="/">Home</Link></li>
-          <li><Link to="/admin-dashboard">Admin Profile</Link></li>
+          <li><Link to="/admin-dashboard/profile">Admin Profile</Link></li>
           <li><Link to="/admin-dashboard/aaddsclorship">Add Scholarship</Link></li>
           <li><Link to="/admin-dashboard/manage-scholarship">Manage Scholarship</Link></li>
           <li><Link to="/admin-dashboard/manage-applied-application">Manage Applied Application</Link></li>
           <li><Link to="/admin-dashboard/manage-users">Manage Users</Link></li>
           <li><Link to="/admin-dashboard/manage-review">Manage Review</Link></li>
+          <li><Link to="/admin-dashboard/analytics">Analytics</Link></li>
         </ul>    
       </div>
     </div>
