@@ -44,14 +44,24 @@ const AuthProvider = ({ children }) => {
             const token = await currentUser.getIdToken();
             localStorage.setItem("access-token", token); // Save token for later
            // console.log(" Firebase Access Token:", token);
+           // add user role
+            const res = await axios.get(`http://localhost:5000/users/${currentUser.email}`);
+          setUserRole(res.data.role);
           } catch (err) {
             console.error(" Failed to get Firebase token:", err);
+             setUserRole(null);
           }
+           finally {
+        setLoding(false); // after token + role fetched
+      }
         } else {
           localStorage.removeItem("access-token");
+          setUserRole(null);
+          setLoding(false)
         }
       };
 
+     setLoding(false);
       getToken();
     });
     return () => {
@@ -81,12 +91,12 @@ const AuthProvider = ({ children }) => {
   };
 
 // set role 
-useEffect(() => {
-  if (user?.email) {
-    axios.get(`http://localhost:5000/users/${user.email}`)
-      .then(res => setUserRole(res.data.role));
-  }
-}, [user]);
+// useEffect(() => {
+//   if (user?.email) {
+//     axios.get(`http://localhost:5000/users/${user.email}`)
+//       .then(res => setUserRole(res.data.role));
+//   }
+// }, [user]);
 
   const authData = {
     createUser,

@@ -30,6 +30,8 @@ import ManageScholarshipMod from "../Page/moderetor/ManageScholarshipMod";
 import AllReviewmod from "../Page/moderetor/AllReviewmod";
 import AplidScholarshipMod from "../Page/moderetor/AplidScholarshipMod";
 import AddSholarshipMod from "../Page/moderetor/AddSholarshipMod";
+import PrivateAdminRoute from "../private/PrivateAdminRoute";
+import PrivateModRoute from "../private/PrivateModRoute";
 
 
 
@@ -67,7 +69,7 @@ const scholarshipLoader = async () => {
     const res = await axiosSecure.get(`/scholarships`);
     return res.data.find((item) => item._id === params.id);
   },
-         element: <ApplyScholarship />
+         element: <PrivateRoute> <ApplyScholarship /> </PrivateRoute> 
           
         },
         {
@@ -96,31 +98,31 @@ const scholarshipLoader = async () => {
   },
   {
     path: "/admin-dashboard",
-    element: <PrivateRoute> <AdminDashboard/></PrivateRoute> ,
+    element: <PrivateAdminRoute> <AdminDashboard/> </PrivateAdminRoute> ,
     children: [
       {
         index : true,
-        element: <PrivateRoute> <AdminProfile/></PrivateRoute>
+        element: <PrivateAdminRoute> <AdminProfile/></PrivateAdminRoute>
       },
       {
         path:"/admin-dashboard/aaddsclorship",
-        element:  <PrivateRoute><AddScholarship></AddScholarship></PrivateRoute>
+        element:  <PrivateAdminRoute><AddScholarship></AddScholarship></PrivateAdminRoute>
       },
       {
         path: "/admin-dashboard/manage-scholarship",
-        element: <ManageScholarships/>
+        element:   <ManageScholarships/> 
       },
       {
         path: "/admin-dashboard/manage-applied-application",
-        element: <ManagedAppliedScholarships/>
+        element: <PrivateAdminRoute> <ManagedAppliedScholarships/>  </PrivateAdminRoute> 
       },
       {
         path: "/admin-dashboard/manage-users",
-        element: <ManageUsers/>
+        element:  <PrivateAdminRoute> <ManageUsers/> </PrivateAdminRoute> 
       },
       {
         path: "/admin-dashboard/manage-review",
-        element:<ManageReviews/>
+        element:  <PrivateAdminRoute> <ManageReviews/> </PrivateAdminRoute>   
       }
     ]
   },
@@ -130,42 +132,42 @@ const scholarshipLoader = async () => {
     children:[
       {
         index: true, // default route for /dashboard
-        element: <UserProfile />,
+        element: <PrivateRoute> <UserProfile /></PrivateRoute> ,
       },
       {
         path: '/user-dashboard/applications',
-        element: <MyApplications/>,
+        element: <PrivateRoute> <MyApplications/></PrivateRoute>,
       },
       {
         path: '/user-dashboard/reviews',
-        element: <MyReviews />,
+        element: <PrivateRoute><MyReviews/> </PrivateRoute> ,
       },
 
     ]
   },
   {
   path: '/moderetor-dashboard',
-  element :<ModeratorDashboardLayout/>,
+  element :<PrivateModRoute> <ModeratorDashboardLayout/></PrivateModRoute>,
   children:[
     {
       index : true,
-      element : <MyProfile/>
+      element : <PrivateModRoute><MyProfile/></PrivateModRoute>
     },
 {
   path: 'manage-scholarshipsmod',
-  element: <ManageScholarshipMod/>
+  element: <PrivateModRoute> <ManageScholarshipMod/> </PrivateModRoute>
 },
 {
   path:'allreview',
-  element :<AllReviewmod/>
+  element : <PrivateModRoute> <AllReviewmod/> </PrivateModRoute>  
 },
 {
 path:'applied-scholarships',
-  element :<AplidScholarshipMod/>  
+  element : <PrivateModRoute><AplidScholarshipMod/></PrivateModRoute>  
 },
 {
   path:'addscholarship',
-  element :<AddSholarshipMod/>
+  element :<PrivateModRoute> <AddSholarshipMod/> </PrivateModRoute>
 }
 
   ]

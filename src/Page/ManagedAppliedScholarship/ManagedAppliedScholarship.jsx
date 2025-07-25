@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
-import { FaEye, FaCommentAlt, FaTimes } from "react-icons/fa";
+import { useEffect, useState, useMemo } from "react";
+import { FaEye, FaCommentAlt, FaTimes, FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 import Swal from "sweetalert2";
 import axiosSecure from "../../Hooks/useAxiosSecure";
+import { format } from "date-fns";
+
 
 const ManagedAppliedScholarships = () => {
   const [applications, setApplications] = useState([]);
@@ -10,12 +12,37 @@ const ManagedAppliedScholarships = () => {
   const [detailsModal, setDetailsModal] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(true);
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterAppliedDate, setFilterAppliedDate] = useState("");
+  const [filterDeadline, setFilterDeadline] = useState("");
 
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const res = await axiosSecure.get("/get-applied-scholarships");
-        setApplications(res.data);
+        const [appliedRes, scholarshipsRes] = await Promise.all([
+          axiosSecure.get("/get-applied-scholarships"),
+          axiosSecure.get("/scholarships"),
+        ]);
+
+        const appliedData = appliedRes.data;
+        const scholarshipsData = scholarshipsRes.data;
+
+        const scholarshipsMap = new Map(
+          scholarshipsData.map((s) => [s._id, s])
+        );
+
+        const mergedApplications = appliedData.map((app) => {
+          const scholarship = scholarshipsMap.get(app.scholarshipId);
+          return {
+            ...app,
+            scholarshipDeadline: scholarship ? scholarship.deadline : "N/A",
+            appliedDate: app.applicationDate,
+          };
+        });
+
+        setApplications(mergedApplications);
       } catch (error) {
         console.error("Error fetching applications:", error);
       } finally {
@@ -73,11 +100,133 @@ const ManagedAppliedScholarships = () => {
     }
   };
 
+  const sortedAndFilteredApplications = useMemo(() => {
+    let sortableItems = [...applications];
+
+    if (filterStatus !== 'all') {
+      sortableItems = sortableItems.filter(app => app.status === filterStatus);
+    }
+
+  if (filterAppliedDate) {
+  sortableItems = sortableItems.filter(app => {
+    const appDate = new Date(app.appliedAt);
+    if (isNaN(appDate)) return false;
+    const formattedAppDate = format(appDate, 'yyyy-MM-dd');
+    return formattedAppDate === filterAppliedDate;
+  });
+}
+
+if (filterDeadline) {
+  sortableItems = sortableItems.filter(app => {
+    const deadlineDate = new Date(app.scholarshipDeadline);
+    if (isNaN(deadlineDate)) return false;
+    const formattedDeadline = format(deadlineDate, 'yyyy-MM-dd');
+    return formattedDeadline === filterDeadline;
+  });
+}
+
+
+
+    if (searchTerm) {
+      sortableItems = sortableItems.filter(app =>
+        app.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        app.universityName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (sortConfig.key !== null) {
+      sortableItems.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return sortableItems;
+  }, [applications, filterStatus, sortConfig, searchTerm, filterAppliedDate, filterDeadline]);
+
+  const requestSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getSortIcon = (name) => {
+    if (sortConfig.key !== name) {
+      return <FaSort />;
+    }
+    if (sortConfig.direction === 'ascending') {
+      return <FaSortUp />;
+    }
+    return <FaSortDown />;
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
       <h2 className="text-xl md:text-2xl font-bold text-center text-gray-800 mb-4 sm:mb-6">
         All Applied Scholarships
       </h2>
+
+      <div className="flex flex-col sm:flex-row justify-between mb-4 sm:mb-6 gap-4">
+        <div className="flex-1">
+          <label htmlFor="status-filter" className="block text-sm font-medium text-gray-700">
+            Filter by Status
+          </label>
+          <select
+            id="status-filter"
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+          >
+            <option value="all">All</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+        <div className="flex-1">
+          <label htmlFor="applied-date-filter" className="block text-sm font-medium text-gray-700">
+            Filter by Applied Date
+          </label>
+          <input
+            type="date"
+            id="applied-date-filter"
+            value={filterAppliedDate}
+            onChange={(e) => setFilterAppliedDate(e.target.value)}
+            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+          />
+        </div>
+        <div className="flex-1">
+          <label htmlFor="deadline-filter" className="block text-sm font-medium text-gray-700">
+            Filter by Scholarship Deadline
+          </label>
+          <input
+            type="date"
+            id="deadline-filter"
+            value={filterDeadline}
+            onChange={(e) => setFilterDeadline(e.target.value)}
+            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+          />
+        </div>
+        <div className="flex-1">
+          <label htmlFor="search" className="block text-sm font-medium text-gray-700">
+            Search by Name or University
+          </label>
+          <input
+            type="text"
+            id="search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            placeholder="Search..."
+          />
+        </div>
+      </div>
 
       {loading ? (
         <div className="flex justify-center items-center h-64">
@@ -87,7 +236,7 @@ const ManagedAppliedScholarships = () => {
         <>
           {/* Mobile View - Cards */}
           <div className="sm:hidden space-y-3">
-            {applications.map((app) => (
+            {sortedAndFilteredApplications.map((app) => (
               <div key={app._id} className="bg-white p-3 rounded-lg shadow border">
                 <div className="flex justify-between items-start">
                   <div>
@@ -148,20 +297,26 @@ const ManagedAppliedScholarships = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Name
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onClick={() => requestSort('userName')}>
+                    Name {getSortIcon('userName')}
                   </th>
-                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    University
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onClick={() => requestSort('universityName')}>
+                    University {getSortIcon('universityName')}
                   </th>
-                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Degree
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onClick={() => requestSort('subjectCategory')}>
+                    Degree {getSortIcon('subjectCategory')}
                   </th>
-                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Category
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onClick={() => requestSort('scholarshipCategory')}>
+                    Category {getSortIcon('scholarshipCategory')}
                   </th>
-                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onClick={() => requestSort('status')}>
+                    Status {getSortIcon('status')}
+                  </th>
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onClick={() => requestSort('appliedDate')}>
+                    Applied Date {getSortIcon('appliedDate')}
+                  </th>
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onClick={() => requestSort('scholarshipDeadline')}>
+                    Deadline {getSortIcon('scholarshipDeadline')}
                   </th>
                   <th className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
@@ -169,7 +324,7 @@ const ManagedAppliedScholarships = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {applications.map((app) => (
+                {sortedAndFilteredApplications.map((app) => (
                   <tr key={app._id} className="hover:bg-gray-50">
                     <td className="px-3 py-3 whitespace-nowrap text-sm text-gray-900">
                       {app.userName}
@@ -192,6 +347,13 @@ const ManagedAppliedScholarships = () => {
                         {app.status}
                       </span>
                     </td>
+                    <td className="px-3 py-3 whitespace-nowrap text-sm text-gray-900">
+                      {app.appliedAt ? format(new Date(app.appliedAt), "yyyy-MM-dd") : 'N/A'}
+                    </td>
+                    <td className="px-3 py-3 whitespace-nowrap text-sm text-gray-900">
+                      {app.scholarshipDeadline ? format(new Date(app.scholarshipDeadline), "yyyy-MM-dd") : 'N/A'}
+                    </td>
+
                     <td className="px-3 py-3 whitespace-nowrap text-sm text-center">
                       <div className="flex justify-center space-x-2">
                         <button
