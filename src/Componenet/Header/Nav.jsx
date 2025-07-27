@@ -48,8 +48,8 @@ const Nav = () => {
                     )
                   }
                   
-                  {(userRole === 'user' ||userRole === 'moderator' || userRole === 'admin'  )&&(
-                      <li><Link to="/user-dashboard" className="hover:text-accent"> Dashboard</Link></li>
+                  {(userRole === 'user')&&(
+                      <li><Link to="/user-dashboard" className="hover:text-accent">  Dashboard</Link></li>
                     )
                   }
                   

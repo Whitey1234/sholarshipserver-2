@@ -45,7 +45,7 @@ const AuthProvider = ({ children }) => {
             localStorage.setItem("access-token", token); // Save token for later
            // console.log(" Firebase Access Token:", token);
            // add user role
-            const res = await axios.get(`http://localhost:5000/users/${currentUser.email}`);
+            const res = await axios.get(`https://student-scholarship-ass-12.vercel.app/users/${currentUser.email}`);
           setUserRole(res.data.role);
           } catch (err) {
             console.error(" Failed to get Firebase token:", err);
@@ -93,7 +93,7 @@ const AuthProvider = ({ children }) => {
 // set role 
 // useEffect(() => {
 //   if (user?.email) {
-//     axios.get(`http://localhost:5000/users/${user.email}`)
+//     axios.get(`https://student-scholarship-ass-12.vercel.app/users/${user.email}`)
 //       .then(res => setUserRole(res.data.role));
 //   }
 // }, [user]);

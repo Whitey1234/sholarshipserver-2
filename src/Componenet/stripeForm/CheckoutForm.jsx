@@ -16,7 +16,7 @@ const CheckoutForm = ({ amount, onSuccess }) => {
 
     try {
       // 1. Create payment intent on server
-      const { data } = await axios.post('http://localhost:5000/create-payment-intent', {
+      const { data } = await axios.post('https://student-scholarship-ass-12.vercel.app/create-payment-intent', {
         amount: amount * 100, // Convert to cents
       });
 

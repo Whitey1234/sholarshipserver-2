@@ -48,7 +48,7 @@ const ManageScholarships = () => {
     });
 
     if (confirm.isConfirmed) {
-      axios.delete(`http://localhost:5000/scholarships/${id}`)
+      axios.delete(`https://student-scholarship-ass-12.vercel.app/scholarships/${id}`)
         .then(() => {
           setScholarships(prev => prev.filter(item => item._id !== id));
           Swal.fire('Deleted!', 'Scholarship has been deleted.', 'success');
@@ -71,12 +71,12 @@ const ManageScholarships = () => {
       serviceCharge: form.serviceCharge.value
     };
 
-    axios.patch(`http://localhost:5000/scholarships/${editData._id}`, updated)
+    axios.patch(`https://student-scholarship-ass-12.vercel.app/scholarships/${editData._id}`, updated)
       .then(() => {
         Swal.fire('Updated!', 'Scholarship updated successfully.', 'success');
         form.reset();
         setEditData(null);
-        axios.get('http://localhost:5000/scholarships')
+        axios.get('https://student-scholarship-ass-12.vercel.app/scholarships')
           .then(res => setScholarships(res.data));
       });
   };

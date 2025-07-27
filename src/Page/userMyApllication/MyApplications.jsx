@@ -8,6 +8,7 @@ import { FiEdit2, FiTrash2, FiEye, FiStar } from 'react-icons/fi';
 import { FaUniversity } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import EditApplicationModal from '../../Componenet/EditModal/EditApplicationModal';
+import Feedback from '../FeedbackApplication/Feedback';
 
 const MyApplications = () => {
   const { user } = useContext(AuthContext);
@@ -305,6 +306,8 @@ const [detailsApp, setDetailsApp] = useState(null);
     </div>
   </div>
 </dialog>
+ {/* feedbacck  */}
+  <Feedback/>
     </div>
   );
 };

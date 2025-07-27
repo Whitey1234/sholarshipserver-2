@@ -4,7 +4,8 @@ import { useEffect } from 'react';
 
 const useAxiosSecure = () => {
   const axiosSecure = axios.create({
-    baseURL: 'http://localhost:5000', //  Replace with your backend URL
+   // baseURL: 'https://student-scholarship-ass-12.vercel.app', //  Replace with your backend URL
+    baseURL: 'https://student-scholarship-ass-12.vercel.app', //  Replace with your backend URL
     withCredentials: true, // for cookies if needed
   });
 
