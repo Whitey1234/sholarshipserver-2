@@ -3,11 +3,11 @@ import { useState } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 
-const CheckoutForm = ({ amount, onSuccess }) => {
+const CheckoutForm = ({  onSuccess }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
-
+ const amount = 25; // USD
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements) return;
