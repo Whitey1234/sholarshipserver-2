@@ -33,6 +33,7 @@ import AddSholarshipMod from "../Page/moderetor/AddSholarshipMod";
 import Analytics from "../Page/Analytics/Analytics";
 import PrivateAdminRoute from "../private/PrivateAdminRoute";
 import PrivateModRoute from "../private/PrivateModRoute";
+import ErrorPage from "../Page/Error/ErrorPage";
 
 
 
@@ -94,6 +95,10 @@ const scholarshipLoader = async () => {
         {
             path : '/login',
             element: <Login/>
+        },
+        {
+          path: "/*",
+          element : <ErrorPage/>
         }
      ]
   },
